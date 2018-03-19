@@ -1,0 +1,58 @@
+:root {
+    --content-max-width: 800px;
+}
+
+html {
+    box-sizing: border-box;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+}
+
+main {
+    max-width: var(--content-max-width);
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+}
+
+h1 {
+    text-align: center;
+    font-family: 'Great Vibes', cursive;
+    margin: 10px 0;
+    font-size: 60px;
+}
+
+textarea {
+    padding: 10px 15px;
+    min-width: 100%;
+    min-height: 150px;
+    resize: vertical;
+    font-size: 20px;
+    letter-spacing: .6px;
+    font-family: 'Crimson Text', serif;
+}
+
+.unselectable {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+@media screen and (max-width: 800px) {
+    textarea {
+        height: calc(100vh - 99px);
+        border: none;
+        border-top: 1px solid black;
+    }
+}
