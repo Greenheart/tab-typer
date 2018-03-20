@@ -51,25 +51,31 @@ h1 {
     left: 0;
     z-index: 2;
     background: tomato;
-    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
 }
 
 .menu {
-    position: fixed;
-    left: 50%;
-    top: calc(var(--header-height) + 25px);
-    margin-left: -350px;
     z-index: 3;
-    background: red;
+    background: white;
     padding: 10px;
+    box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, .1);
     min-width: 300px;
-    width: 700px;
+    width: 90vw;
+    max-width: 600px;
+    margin-top: calc(var(--header-height) + var(--header-offset));
 }
 
-.menu h2 {
+.menu h2,
+.menu p {
     text-align: center;
     font-family: Consolas, monospace;
     font-weight: 400;
+    margin-bottom: 20px;
+}
+
+.menu h2 {
     font-size: 28px;
     margin-bottom: 10px;
 }
@@ -183,6 +189,10 @@ textarea {
     -ms-user-select: none;
     -o-user-select: none;
     user-select: none;
+}
+
+.no-scroll {
+    overflow: hidden;
 }
 
 .hidden {
