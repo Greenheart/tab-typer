@@ -19,6 +19,18 @@ body {
     box-shadow: 0 0 1000px 600px hsla(0, 0%, 0%, .08);
 }
 
+#last-save {
+    position: absolute;
+    top: 15px;
+    left: 25px;
+    font-style: italic;
+    color: #888;
+}
+
+#last-save:empty {
+    display: none;
+}
+
 main {
     padding: 0 50px;
     max-width: var(--content-max-width);
