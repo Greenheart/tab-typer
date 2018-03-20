@@ -6,6 +6,7 @@ class TextEditor {
         this.newFileButton = document.querySelector('#new')
         this.menuToggle = document.querySelector('#menu-toggle')
         this.menuContainer = document.querySelector('.menu-background')
+        this.fileMessage = document.querySelector('#file-message')
         this.bindUI()
 
         this.files = []
@@ -19,6 +20,8 @@ class TextEditor {
                 this.files = []
                 this.fileList.innerHTML = ''
                 editor.value = ''
+
+                this.listFiles(this.files)
             }
         }
     }
@@ -67,7 +70,9 @@ class TextEditor {
     }
 
     listFiles (files) {
+        const message = files.length ? 'Select a file to open it.' : `Looks like you have no files yet. <a href="javascript:;">Create one</a>.`
         this.fileList.innerHTML = files.map(f => `<li class="btn" data-id="${f.id}">${f.name}</li>`).join('')
+        this.fileMessage.innerHTML = message
     }
 
     showFile (file) {
@@ -123,7 +128,7 @@ class TextEditor {
         this.editor.style.height = this.editor.scrollHeight + 2 + 'px'
     }
 
-    addNewFile (event) {
+    addNewFile () {
         // NOTE: There may be some data loss here if the user creates a new file,
         // before the current open one has been saved.
         this.files.push(this.createFile())
@@ -134,6 +139,8 @@ class TextEditor {
         if (!this.menuContainer.classList.contains('hidden')) {
             this.toggleMenu()
         }
+
+        this.editor.focus()
     }
 
     toggleMenu () {
@@ -171,6 +178,11 @@ class TextEditor {
         })
 
         this.menuToggle.addEventListener('click', event => this.toggleMenu())
+        this.fileMessage.addEventListener('click', event => {
+            if (event.target.tagName === 'A') {
+                this.addNewFile()
+            }
+        })
 
         window.addEventListener('keydown', event => {
             if (event.key === 'Escape') {
