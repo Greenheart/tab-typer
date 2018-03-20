@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', event => {
+    window.DEBUG = true
     const editor = new TextEditor('#editor', window.localforage)
 })
 
@@ -8,6 +9,7 @@ class TextEditor {
         this.editor = document.querySelector(editorId)
         this.lastSave = document.querySelector('#last-save')
         this.fileList = document.querySelector('#file-list')
+        this.newFileButton = document.querySelector('#new')
         this.bindUI()
 
         this.files = []
@@ -15,11 +17,11 @@ class TextEditor {
         this.db = db
         this.init()
 
-        window.DEBUG = true
         if (window.DEBUG) {
             window.c = () => {
                 localforage.clear()
                 this.files = []
+                this.fileList.innerHTML = ''
             }
         }
     }
@@ -80,15 +82,14 @@ class TextEditor {
 
     showLastEdited (files) {
         if (files) {
-            this.showFile(files[0])
-            this.openFile = files[0]
-        }
+            const lastEdited = files.reduce((lastEdited, file) => {
+                if (file.time > lastEdited.time) return file
+                return lastEdited
+            })
 
-        // TODO: Show the last edited file.
-        // const lastEdited = files.reduce((lastEdited, file) => {
-        //     if (file.time > lastEdited.time) return file
-        //     return lastEdited
-        // }, { time: 0, content: '', lastSave: '' })
+            this.showFile(lastEdited)
+            this.openFile = lastEdited
+        }
     }
 
     saveAllFiles () {
@@ -134,10 +135,17 @@ class TextEditor {
         this.editor.placeholder = `Hey there!\n\nThis is a simple, offline-first text editor for your browser. Files are automatically saved as you type, and stored locally on your device.`
         this.editor.focus()
 
-        if (!window.DEBUG) {
+        if (window.DEBUG !== true) {
             // Save before tab is closed.
             window.addEventListener('beforeunload', () => this.saveAllFiles())
         }
+
+        this.newFileButton.addEventListener('click', () => {
+            this.files.push(this.createFile())
+            this.showLastEdited(this.files)
+            this.listFiles(this.files)
+            this.saveAllFiles()
+        })
     }
 }
 
