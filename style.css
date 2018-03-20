@@ -37,6 +37,7 @@ main {
     max-width: var(--content-max-width);
     display: flex;
     flex: 1;
+    flex: 1 1 auto;
     flex-direction: column;
     min-height: 1000px;
     margin: 25px auto 100px;
@@ -83,7 +84,7 @@ textarea {
     padding: 10px 15px;
     min-width: 100%;
     min-height: 150px;
-    resize: vertical;
+    resize: none;
     font-size: 20px;
     letter-spacing: .6px;
     font-family: 'Crimson Text', serif;
