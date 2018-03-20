@@ -139,6 +139,7 @@ class TextEditor {
     toggleMenu () {
         document.body.classList.toggle('no-scroll')
         this.menuContainer.classList.toggle('hidden')
+        this.menuContainer.scrollTop = 0
     }
 
     bindUI () {
