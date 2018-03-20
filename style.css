@@ -102,10 +102,6 @@ textarea {
 }
 
 @media screen and (max-width: 800px) {
-    textarea {
-        height: calc(100vh - 99px);
-    }
-
     main {
         margin: 0;
         padding-bottom: 25px;
