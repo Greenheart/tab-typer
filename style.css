@@ -155,6 +155,10 @@ main {
     margin: 0 auto 100px;
 }
 
+/*
+Credit for paper effect: https://www.sitepoint.com/pure-css3-paper-curls/
+Below is my slightly modified version.
+*/
 .paper {
     position: relative;
 	background-color: #fff;
