@@ -50,7 +50,7 @@ class TextEditor {
             .catch(this.handleError)
     }
 
-    createFile (name = 'Untitled') {
+    createFile (name = ('Untitled ' + (this.files.length + 1))) {
         const date = new Date()
         return {
             name,
