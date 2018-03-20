@@ -1,17 +1,27 @@
 document.addEventListener('DOMContentLoaded', event => {
-    const editor = document.querySelector('#editor')
-    editor.placeholder = `Hey there!\n\nThis is a simple text editor for your browser. Files are automatically saved and stored locally on your device.`
+    const editor = new TextEditor('#editor')
+})
 
-    function updateEditorHeight () {
-        editor.style.height = '1px'
-        editor.style.height = editor.scrollHeight + 2 + 'px'
+
+class TextEditor {
+    constructor (editorId) {
+        this.editor = document.querySelector(editorId)
+        this.editor.placeholder = `Hey there!\n\nThis is a simple text editor for your browser. Files are automatically saved and stored locally on your device.`
+
+        this.bindUI()
+        this.updateEditorHeight()
+        this.editor.focus()
     }
 
-    editor.addEventListener('input', event => {
-        event.preventDefault()
-        updateEditorHeight()
-    })
+    updateEditorHeight () {
+        this.editor.style.height = '1px'
+        this.editor.style.height = this.editor.scrollHeight + 2 + 'px'
+    }
 
-    editor.focus()
-    updateEditorHeight()
-})
+    bindUI () {
+        this.editor.addEventListener('input', event => {
+            event.preventDefault()
+            updateEditorHeight()
+        })
+    }
+}
