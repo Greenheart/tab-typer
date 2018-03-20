@@ -167,7 +167,7 @@ class TextEditor {
 
         window.addEventListener('keypress', event => {
             if (event.key === 'Escape') {
-                this.menuContainer.classList.add('hidden')
+                this.menuContainer.classList.toggle('hidden')
             }
         })
     }
