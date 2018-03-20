@@ -123,12 +123,6 @@ h1 {
     margin-top: 0;
 }
 
-/* TODO:
-    - Set body { overflow: hidden; } when menu is shown
-    - Also add some kind of background, so the menu gets in focus.
-    - Possibly hide the header as well, or always show it on top, idk.
-*/
-
 #last-save {
     position: absolute;
     font-family: Consolas, monospace;
