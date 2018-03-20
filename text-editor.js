@@ -122,7 +122,7 @@ class TextEditor {
 
     bindUI () {
         // Save 2 seconds after the user stops typing.
-        this.editor.addEventListener('keyup', Helpers.debounce(() => this.saveAllFiles(), 2000))
+        this.editor.addEventListener('input', Helpers.debounce(() => this.saveAllFiles(), 2000))
 
         this.editor.addEventListener('input', event => this.updateEditorHeight())
         this.updateEditorHeight()
