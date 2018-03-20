@@ -3,6 +3,7 @@
     --header-height: 77px;
     --editor-min-height: 1000px;
     --header-offset: 25px;
+    --light-gray: #999;
 }
 
 html {
@@ -130,7 +131,7 @@ h1 {
     top: 15px;
     right: 20px;
     font-style: italic;
-    color: #999;
+    color: var(--light-gray);
 }
 
 #last-save:empty,
