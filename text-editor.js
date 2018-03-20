@@ -132,6 +132,11 @@ class TextEditor {
         this.saveAllFiles()
     }
 
+    toggleMenu () {
+        document.body.classList.toggle('no-scroll')
+        this.menuContainer.classList.toggle('hidden')
+    }
+
     bindUI () {
         // Save 2 seconds after the user stops typing.
         this.editor.addEventListener('input', Helpers.debounce(() => this.saveAllFiles(), 1000))
@@ -156,18 +161,15 @@ class TextEditor {
             if (event.target.tagName === 'LI') {
                 this.openFile = this.files.find(f => f.id === event.target.dataset.id)
                 this.showFile(this.openFile)
-                this.menuContainer.classList.add('hidden')
+                this.toggleMenu()
             }
         })
 
-        this.menuToggle.addEventListener('click', event => {
-            document.body.classList.toggle('no-scroll')
-            this.menuContainer.classList.toggle('hidden')
-        })
+        this.menuToggle.addEventListener('click', event => this.toggleMenu())
 
         window.addEventListener('keypress', event => {
             if (event.key === 'Escape') {
-                this.menuContainer.classList.toggle('hidden')
+                this.toggleMenu()
             }
         })
     }
