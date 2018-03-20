@@ -13,15 +13,47 @@ html {
 body {
     padding: 0;
     margin: 0;
-    display: flex;
-    justify-content: center;
+}
+
+.background {
+    box-shadow: 0 0 1000px 600px hsla(0, 0%, 0%, .08);
 }
 
 main {
+    padding: 0 50px;
     max-width: var(--content-max-width);
     display: flex;
     flex: 1;
     flex-direction: column;
+    min-height: 1000px;
+    margin: 25px auto 100px;
+}
+
+.paper {
+    position: relative;
+	background-color: #fff;
+	box-shadow: 0 0 5px rgba(0, 0, 0, .2), inset 0 0 100px rgba(0, 0, 0, .05);
+}
+
+.paper:before, .paper:after
+{
+	position: absolute;
+	width: 40%;
+	height: 10px;
+	content: ' ';
+	left: 12px;
+	bottom: 14px;
+	background: transparent;
+	transform: skew(-5deg) rotate(-5deg);
+	box-shadow: 0 6px 12px rgba(0, 0, 0, .3);
+	z-index: -1;
+}
+
+.paper:after
+{
+	left: auto;
+	right: 12px;
+	transform: skew(5deg) rotate(5deg);
 }
 
 h1 {
@@ -32,6 +64,9 @@ h1 {
 }
 
 textarea {
+    background: transparent;
+    outline: none;
+    border: none;
     padding: 10px 15px;
     min-width: 100%;
     min-height: 150px;
@@ -52,7 +87,5 @@ textarea {
 @media screen and (max-width: 800px) {
     textarea {
         height: calc(100vh - 99px);
-        border: none;
-        border-top: 1px solid black;
     }
 }
