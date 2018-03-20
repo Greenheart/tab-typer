@@ -7,10 +7,21 @@ class TextEditor {
     constructor (editorId, db) {
         this.editor = document.querySelector(editorId)
         this.lastSave = document.querySelector('#last-save')
+        this.fileList = document.querySelector('#file-list')
         this.bindUI()
 
+        this.files = []
+        this.openFile = null
         this.db = db
         this.init()
+
+        window.DEBUG = true
+        if (window.DEBUG) {
+            window.c = () => {
+                localforage.clear()
+                this.files = []
+            }
+        }
     }
 
     init () {
@@ -20,9 +31,44 @@ class TextEditor {
             description: 'A simple text editor for your browser.'
         })
 
-        this.db.getItem('file')
-                .then(f => this.showFile(f))
-                .catch(this.handleError)
+        this.db.getItem('files')
+            .then(files => {
+                if (files && files.length > 0) {
+                    console.info('Loaded files: ', files)
+                    this.files = files
+                } else {
+                    this.files.push(this.createFile())
+                    console.info('Starting with blank file: ', this.files)
+                }
+
+                return this.files
+            })
+            .then(files => {
+                this.listFiles(files)
+                return files
+            })
+            .then(files => {
+                this.showLastEdited(files)
+                return files
+            })
+            .catch(this.handleError)
+    }
+
+    createFile (name = 'Untitled') {
+        const date = new Date()
+        return {
+            name,
+            content: '',
+            // TODO: Save files with only the unix timestamp, the string can be retrieved when needed.
+            // store in `lastSave` to clarify meaning of the timestamp.
+            lastSave: date.toLocaleTimeString(),
+            time: date.getTime(),
+            id: Helpers.uuidv4()
+        }
+    }
+
+    listFiles (files) {
+        this.fileList.innerHTML = files.map(f => `<li>${f.name}</li>`).join('')
     }
 
     showFile (file) {
@@ -32,18 +78,37 @@ class TextEditor {
         }
     }
 
-    saveFile () {
-        const file = {
-            content: this.editor.value,
-            lastSave: new Date().toLocaleTimeString()
+    showLastEdited (files) {
+        if (files) {
+            this.showFile(files[0])
+            this.openFile = files[0]
         }
-        this.db.setItem('file', file)
-            .then(f => this.updateSaveTime(f))
+
+        // TODO: Show the last edited file.
+        // const lastEdited = files.reduce((lastEdited, file) => {
+        //     if (file.time > lastEdited.time) return file
+        //     return lastEdited
+        // }, { time: 0, content: '', lastSave: '' })
+    }
+
+    saveAllFiles () {
+        const date = new Date()
+        const files = this.files.map(f => {
+            if (f === this.openFile) {
+                f.content = this.editor.value,
+                f.lastSave = date.toLocaleTimeString(),
+                f.time = date.getTime()
+            }
+            return f
+        })
+
+        this.db.setItem('files', files)
+            .then(files => this.updateSaveTime(files))
             .catch(this.handleError)
     }
 
-    updateSaveTime (file) {
-        this.lastSave.innerText = this.getSaveTimeString(file.lastSave)
+    updateSaveTime (files) {
+        this.lastSave.innerText = this.getSaveTimeString(this.openFile.lastSave)
     }
 
     getSaveTimeString (time) {
@@ -62,15 +127,17 @@ class TextEditor {
 
     bindUI () {
         // Save 2 seconds after the user stops typing.
-        this.editor.addEventListener('keyup', Helpers.debounce(() => this.saveFile(), 2000))
+        this.editor.addEventListener('keyup', Helpers.debounce(() => this.saveAllFiles(), 2000))
 
         this.editor.addEventListener('input', event => this.updateEditorHeight())
         this.updateEditorHeight()
-        this.editor.placeholder = `Hey there!\n\nThis is a simple text editor for your browser. Files are automatically saved and stored locally on your device.`
+        this.editor.placeholder = `Hey there!\n\nThis is a simple, offline-first text editor for your browser. Files are automatically saved as you type, and stored locally on your device.`
         this.editor.focus()
 
-        // Save the current file before tab is closed.
-        window.addEventListener('beforeunload', () => this.saveFile())
+        if (!window.DEBUG) {
+            // Save before tab is closed.
+            window.addEventListener('beforeunload', () => this.saveAllFiles())
+        }
     }
 }
 
@@ -83,5 +150,11 @@ const Helpers = {
             clearTimeout(timeout)
             timeout = setTimeout(caller, time)
         }
+    },
+    // Credit: https://stackoverflow.com/a/2117523
+    uuidv4 () {
+        return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+            (c ^ window.crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+        )
     }
 }

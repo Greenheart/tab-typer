@@ -27,7 +27,8 @@ body {
     color: #888;
 }
 
-#last-save:empty {
+#last-save:empty,
+#file-list:empty {
     display: none;
 }
 
@@ -99,5 +100,9 @@ textarea {
 @media screen and (max-width: 800px) {
     textarea {
         height: calc(100vh - 99px);
+    }
+
+    main {
+        margin: 0;
     }
 }
