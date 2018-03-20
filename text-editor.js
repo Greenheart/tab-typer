@@ -107,7 +107,7 @@ class TextEditor {
     }
 
     getSaveTimeString (time) {
-        return 'Last save at ' + time
+        return 'Saved ' + time
     }
 
     handleError (error) {
