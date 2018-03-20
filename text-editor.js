@@ -130,6 +130,10 @@ class TextEditor {
         this.showLastEdited(this.files)
         this.listFiles(this.files)
         this.saveAllFiles()
+
+        if (!this.menuContainer.classList.contains('hidden')) {
+            this.toggleMenu()
+        }
     }
 
     toggleMenu () {
