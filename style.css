@@ -33,6 +33,35 @@ header {
     position: fixed;
     width: 100vw;
     z-index: 3;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header button {
+    padding: 15px 20px;
+    margin-left: 15px;
+    width: 100px;
+}
+
+header button:last-child {
+    margin-right: 15px;
+}
+
+.btn {
+    border: 0;
+    background-color: #f0f3f5;
+    font-family: Consolas, monospace;
+    transition: all 0.1s ease-out;
+    border-radius: 1px;
+}
+
+.btn:hover {
+    cursor: pointer;
+    box-shadow: 1px 1px 2px 2px rgba(0, 0, 0, .12);
+    transition: all 0.05s ease-in;
+    transform: scale(1.02);
 }
 
 h1 {
@@ -88,17 +117,6 @@ h1 {
 #file-list li {
     padding: 18px 15px;
     margin: 15px;
-    background-color: #f0f3f5;
-    font-family: Consolas, monospace;
-    transition: all 0.1s ease-out;
-    border-radius: 1px;
-}
-
-#file-list li:hover {
-    cursor: pointer;
-    box-shadow: 1px 1px 2px 2px rgba(0, 0, 0, .12);
-    transition: all 0.05s ease-in;
-    transform: scale(1.02);
 }
 
 #file-list li:first-child {

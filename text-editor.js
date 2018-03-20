@@ -65,7 +65,7 @@ class TextEditor {
     }
 
     listFiles (files) {
-        this.fileList.innerHTML = files.map(f => `<li data-id="${f.id}">${f.name}</li>`).join('')
+        this.fileList.innerHTML = files.map(f => `<li class="btn" data-id="${f.id}">${f.name}</li>`).join('')
     }
 
     showFile (file) {
