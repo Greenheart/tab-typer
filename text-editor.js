@@ -121,6 +121,15 @@ class TextEditor {
         this.editor.style.height = this.editor.scrollHeight + 2 + 'px'
     }
 
+    addNewFile (event) {
+        // NOTE: There may be some data loss here if the user creates a new file,
+        // before the current open one has been saved.
+        this.files.push(this.createFile())
+        this.showLastEdited(this.files)
+        this.listFiles(this.files)
+        this.saveAllFiles()
+    }
+
     bindUI () {
         // Save 2 seconds after the user stops typing.
         this.editor.addEventListener('input', Helpers.debounce(() => this.saveAllFiles(), 1000))
@@ -140,13 +149,7 @@ class TextEditor {
             window.addEventListener('beforeunload', () => this.saveAllFiles())
         }
 
-        this.newFileButton.addEventListener('click', () => {
-            // NOTE: There may be some data loss here if the user creates a new file,
-            // before the current open one has been saved.
-            this.files.push(this.createFile())
-            this.showLastEdited(this.files)
-            this.listFiles(this.files)
-            this.saveAllFiles()
+        this.newFileButton.addEventListener('click', () => this.addNewFile())
         })
     }
 }
