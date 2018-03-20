@@ -126,6 +126,11 @@ class TextEditor {
 
         this.editor.addEventListener('input', event => this.updateEditorHeight())
         this.updateEditorHeight()
+
+        Helpers.throttle('resize', 'optimizedResize')
+        window.addEventListener('optimizedResize', event => this.updateEditorHeight())
+
+
         this.editor.placeholder = `Hey there!\n\nThis is a simple, offline-first text editor for your browser. Files are automatically saved as you type, and stored locally on your device.`
         this.editor.focus()
 

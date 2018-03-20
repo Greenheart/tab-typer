@@ -90,6 +90,7 @@ textarea {
     font-size: 20px;
     letter-spacing: .6px;
     font-family: 'Crimson Text', serif;
+    overflow-y: hidden;
 }
 
 .unselectable {
@@ -107,5 +108,6 @@ textarea {
 
     main {
         margin: 0;
+        padding-bottom: 25px;
     }
 }
