@@ -16,6 +16,7 @@ class TextEditor {
                 localforage.clear()
                 this.files = []
                 this.fileList.innerHTML = ''
+                editor.value = ''
             }
         }
     }
@@ -140,6 +141,8 @@ class TextEditor {
         }
 
         this.newFileButton.addEventListener('click', () => {
+            // NOTE: There may be some data loss here if the user creates a new file,
+            // before the current open one has been saved.
             this.files.push(this.createFile())
             this.showLastEdited(this.files)
             this.listFiles(this.files)
