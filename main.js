@@ -68,6 +68,9 @@ class TextEditor {
         this.updateEditorHeight()
         this.editor.placeholder = `Hey there!\n\nThis is a simple text editor for your browser. Files are automatically saved and stored locally on your device.`
         this.editor.focus()
+
+        // Save the current file before tab is closed.
+        window.addEventListener('beforeunload', () => this.saveFile())
     }
 }
 
