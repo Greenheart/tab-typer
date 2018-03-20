@@ -35,7 +35,7 @@ body {
 }
 
 main {
-    padding: 0 50px;
+    padding: 0 50px 35px;
     max-width: var(--content-max-width);
     display: flex;
     flex: 1;
@@ -51,8 +51,8 @@ main {
 	box-shadow: 0 0 5px rgba(0, 0, 0, .2), inset 0 0 100px rgba(0, 0, 0, .05);
 }
 
-.paper:before, .paper:after
-{
+.paper:before,
+.paper:after {
 	position: absolute;
 	width: 40%;
 	height: 10px;
@@ -65,8 +65,7 @@ main {
 	z-index: -1;
 }
 
-.paper:after
-{
+.paper:after {
 	left: auto;
 	right: 12px;
 	transform: skew(5deg) rotate(5deg);
@@ -104,6 +103,5 @@ textarea {
 @media screen and (max-width: 800px) {
     main {
         margin: 0;
-        padding-bottom: 25px;
     }
 }
