@@ -1,7 +1,8 @@
 :root {
     --content-max-width: 800px;
     --header-height: 77px;
-    --editor-min-height: 1000px
+    --editor-min-height: 1000px;
+    --header-offset: 25px;
 }
 
 html {
@@ -31,7 +32,7 @@ header {
     box-shadow: 0 0 2px 2px rgba(0, 0, 0, .1);
     position: fixed;
     width: 100vw;
-    z-index: 2;
+    z-index: 3;
 }
 
 h1 {
@@ -41,6 +42,68 @@ h1 {
     font-size: 60px;
     height: 100%;
 }
+
+.menu-background {
+    height: 100vh;
+    width: 100vw;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    background: tomato;
+    overflow: hidden;
+}
+
+.menu {
+    position: fixed;
+    left: 50%;
+    top: calc(var(--header-height) + 25px);
+    margin-left: -350px;
+    z-index: 3;
+    background: red;
+    padding: 10px;
+    min-width: 300px;
+    width: 700px;
+}
+
+.menu h2 {
+    text-align: center;
+    font-family: Consolas, monospace;
+    font-weight: 400;
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+#file-list {
+    list-style: none;
+    padding: 0;
+}
+
+#file-list li {
+    padding: 18px 15px;
+    margin: 15px;
+    background-color: #f0f3f5;
+    font-family: Consolas, monospace;
+    transition: all 0.1s ease-out;
+    border-radius: 1px;
+}
+
+#file-list li:hover {
+    cursor: pointer;
+    box-shadow: 1px 1px 2px 2px rgba(0, 0, 0, .12);
+    transition: all 0.05s ease-in;
+    transform: scale(1.02);
+}
+
+#file-list li:first-child {
+    margin-top: 0;
+}
+
+/* TODO:
+    - Set body { overflow: hidden; } when menu is shown
+    - Also add some kind of background, so the menu gets in focus.
+    - Possibly hide the header as well, or always show it on top, idk.
+*/
 
 #last-save {
     position: absolute;
@@ -57,6 +120,12 @@ h1 {
     display: none;
 }
 
+.spacer {
+    height: calc(var(--header-offset) * 4);
+    background: transparent;
+    width: 100%;
+}
+
 main {
     padding: 0 50px 35px;
     max-width: var(--content-max-width);
@@ -65,7 +134,7 @@ main {
     flex: 1 1 auto;
     flex-direction: column;
     min-height: 1000px;
-    margin: 25px auto 100px;
+    margin: 0 auto 100px;
 }
 
 .paper {
@@ -114,6 +183,10 @@ textarea {
     -ms-user-select: none;
     -o-user-select: none;
     user-select: none;
+}
+
+.hidden {
+    display: none;
 }
 
 @media screen and (max-width: 800px) {
