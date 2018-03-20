@@ -171,7 +171,7 @@ class TextEditor {
 
         this.menuToggle.addEventListener('click', event => this.toggleMenu())
 
-        window.addEventListener('keypress', event => {
+        window.addEventListener('keydown', event => {
             if (event.key === 'Escape') {
                 this.toggleMenu()
             }
