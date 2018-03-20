@@ -32,5 +32,14 @@ const Helpers = {
             })
         }
         obj.addEventListener(type, func)
+    },
+    preventScroll (textarea, callback) {
+        // Ensure a textarea isn't scrolled when it's value changes
+        // by wrapping the callback making the change with a scroll reset.
+        return function (event) {
+            const top = textarea.scrollTop
+            callback()
+            textarea.scrollTop = top
+        }
     }
 }
