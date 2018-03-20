@@ -156,6 +156,7 @@ class TextEditor {
             if (event.target.tagName === 'LI') {
                 this.openFile = this.files.find(f => f.id === event.target.dataset.id)
                 this.showFile(this.openFile)
+                this.menuContainer.classList.add('hidden')
             }
         })
 
