@@ -1,22 +1,48 @@
 :root {
     --content-max-width: 800px;
+    --header-height: 77px;
+    --editor-min-height: 1000px
 }
 
 html {
     box-sizing: border-box;
 }
 
+body {
+    padding: 0;
+}
+
 *, *:before, *:after {
     box-sizing: inherit;
 }
 
-body {
-    padding: 0;
+* {
     margin: 0;
 }
 
 .background {
     box-shadow: 0 0 1000px 600px hsla(0, 0%, 0%, .08);
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    z-index: -2;
+}
+
+header {
+    height: var(--header-height);
+    background-color: white;
+    box-shadow: 0 0 2px 2px rgba(0, 0, 0, .1);
+    position: fixed;
+    width: 100vw;
+    z-index: 2;
+}
+
+h1 {
+    text-align: center;
+    font-family: 'Great Vibes', cursive;
+    margin: 0;
+    font-size: 60px;
+    height: 100%;
 }
 
 #last-save {
@@ -71,20 +97,13 @@ main {
 	transform: skew(5deg) rotate(5deg);
 }
 
-h1 {
-    text-align: center;
-    font-family: 'Great Vibes', cursive;
-    margin: 10px 0;
-    font-size: 60px;
-}
-
 textarea {
     background: transparent;
     outline: none;
     border: none;
     padding: 10px 15px;
     min-width: 100%;
-    min-height: 150px;
+    min-height: calc(var(--editor-min-height) - 50px);
     resize: none;
     font-size: 20px;
     letter-spacing: .6px;
