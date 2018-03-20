@@ -4,6 +4,8 @@ class TextEditor {
         this.lastSave = document.querySelector('#last-save')
         this.fileList = document.querySelector('#file-list')
         this.newFileButton = document.querySelector('#new')
+        this.menuToggle = document.querySelector('#menu-toggle')
+        this.menuContainer = document.querySelector('.menu-background')
         this.bindUI()
 
         this.files = []
@@ -156,6 +158,11 @@ class TextEditor {
                 this.openFile = this.files.find(f => f.id === event.target.dataset.id)
                 this.showFile(this.openFile)
             }
+        })
+
+        this.menuToggle.addEventListener('click', event => {
+            document.body.classList.toggle('no-scroll')
+            this.menuContainer.classList.toggle('hidden')
         })
     }
 }
