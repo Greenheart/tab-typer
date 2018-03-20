@@ -65,7 +65,7 @@ class TextEditor {
     }
 
     listFiles (files) {
-        this.fileList.innerHTML = files.map(f => `<li>${f.name}</li>`).join('')
+        this.fileList.innerHTML = files.map(f => `<li data-id="${f.id}">${f.name}</li>`).join('')
     }
 
     showFile (file) {
@@ -150,6 +150,12 @@ class TextEditor {
         }
 
         this.newFileButton.addEventListener('click', () => this.addNewFile())
+
+        this.fileList.addEventListener('click', event => {
+            if (event.target.tagName === 'LI') {
+                this.openFile = this.files.find(f => f.id === event.target.dataset.id)
+                this.showFile(this.openFile)
+            }
         })
     }
 }
