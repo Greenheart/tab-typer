@@ -164,7 +164,7 @@ class TextEditor {
         Helpers.throttle('resize', 'optimizedResize')
         window.addEventListener('optimizedResize', event => this.updateEditorHeight())
 
-        this.editor.placeholder = `Hey there!\n\nThis is a simple, offline-first text editor for your browser. Files are saved automatically as you type, and stored locally on your device.\n\nPress ESC to quickly toggle the menu, where you can switch files.\n\n\n\n\tEnjoy!\n\t// Samuel`
+        this.editor.placeholder = `Hey there!\n\nThis is a simple, offline-first text editor for your browser. Files are saved automatically as you type, and stored locally on your device.\n\nPress ESC to quickly toggle the menu, where you can manage all your files.\n\n\nEnjoy!\n// Samuel`
         this.editor.focus()
 
         if (window.DEBUG !== true) {
