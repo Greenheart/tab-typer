@@ -9,9 +9,11 @@ class TextEditor {
         this.fileName = document.querySelector('#file-name')
         this.fileMessage = document.querySelector('#file-message')
         this.contentWrapper = document.querySelector('.content-wrapper')
+        this.showDeletedFilesToggle = document.querySelector('#show-deleted')
         this.bindUI()
 
         this.files = []
+        this.deletedFiles = []
         this.openFile = null
         this.db = db
         this.init()
@@ -23,12 +25,19 @@ class TextEditor {
                 this.fileList.innerHTML = ''
                 editor.value = ''
 
+                this.showDeletedFilesToggle.checked = false
+                this.showDeletedFilesToggle.parentElement.classList.add('hidden')
                 this.listFiles(this.files)
+            }
+
+            window.a = () => {
+                localforage.iterate((v, k) => console.info(v.length, k, v))
             }
         }
     }
 
     init () {
+        this.showDeletedFilesToggle.checked = false
         this.db.config({
             name: 'Tab Typer',
             storeName: 'tab_typer',
@@ -37,12 +46,9 @@ class TextEditor {
 
         this.db.getItem('files')
             .then(files => {
-                if (files && files.length > 0) {
-                    console.info('Loaded files: ', files)
+                if (files && files.length) {
+                    console.info(`Loaded ${files.length} files: `, files)
                     this.files = files
-                } else {
-                    this.files.push(this.createFile())
-                    console.info('Starting with blank file: ', this.files)
                 }
 
                 return this.files
@@ -50,9 +56,20 @@ class TextEditor {
             .then(files => this.listFiles(files))
             .then(files => this.showLastEdited(files))
             .catch(this.handleError)
+
+        this.db.getItem('deletedFiles')
+            .then(files => {
+                if (files && files.length) {
+                    console.info(`Loaded ${files.length} deleted files.`)
+                    this.deletedFiles = files
+                    this.showDeletedFilesToggle.parentElement.classList.remove('hidden')
+                }
+                return this.deletedFiles
+            })
+            .catch(this.handleError)
     }
 
-    createFile (name = ('Untitled ' + (this.files.length + 1))) {
+    createFile (name = 'Untitled') {
         const date = new Date()
         return {
             name,
@@ -65,26 +82,57 @@ class TextEditor {
         }
     }
 
-    listFiles (files) {
-        const message = files.length ? 'Select a file to open it.' : `Looks like you have no files yet. <a href="javascript:;">Create one</a>.`
-        this.fileList.innerHTML = files.map(f => `<li class="btn" data-id="${f.id}">${f.name} <button class="btn unselectable" title="Delete">X</button></li>`).join('')
-        this.fileMessage.innerHTML = message
+    listFiles (files, showDeleted = false) {
+        if (showDeleted && files.length) {
+            this.fileMessage.innerHTML = 'These are your deleted files. Use the button on each file to restore it.'
+            this.fileList.innerHTML = files.map(f => `<li class="btn deleted-file" data-id="${f.id}">${f.name} <button class="btn">Restore</button></li>`).join('')
+        } else {
+            const message = files.length ? 'Select a file to open it. Or <a href="javascript:;">create a new one</a>.' : `Looks like you have no files yet. <a href="javascript:;">Create one</a>.`
+            this.fileList.innerHTML = files.map(f => `<li class="btn" data-id="${f.id}">${f.name} <button class="btn delete" title="Delete">X</button></li>`).join('')
+            this.fileMessage.innerHTML = message
+        }
         for (const b of this.fileList.querySelectorAll('button')) {
-            b.addEventListener('click', event => this.deleteFile(event))
+            if (showDeleted) {
+                b.addEventListener('click', event => this.restoreFile(event))
+            } else {
+                b.addEventListener('click', event => this.deleteFile(event))
+            }
         }
 
         return files
     }
 
     deleteFile (event) {
-        // TODO: Check if user really want to delete the file
         // http://alistapart.com/article/neveruseawarning
-        if (confirm('Are you sure you want to delete this file?')) {
-            const id = event.target.parentElement.dataset.id
+        const id = event.target.parentElement.dataset.id
+        const file = this.files.find(f => f.id === id)
+        if (file) {
             this.files = this.files.filter(f => f.id !== id)
-            this.openFile = this.getLastEdited(this.files)
-            this.showLastEdited(this.files)
+            this.deletedFiles.push(file)
+            this.listFiles(this.files)
+            this.showDeletedFilesToggle.parentElement.classList.remove('hidden')
             this.saveAllFiles()
+        }
+    }
+
+    restoreFile (event) {
+        const id = event.target.parentElement.dataset.id
+        const file = this.deletedFiles.find(f => f.id === id)
+        if (file) {
+            this.deletedFiles = this.deletedFiles.filter(f => f.id !== id)
+            this.files.push(file)
+
+            this.openFile = file
+            this.showFile(file)
+            this.saveAllFiles()
+
+            if (this.deletedFiles.length) {
+                this.listFiles(this.deletedFiles, true)
+            } else {
+                this.listFiles(this.files)
+                this.showDeletedFilesToggle.parentElement.classList.add('hidden')
+                this.showDeletedFilesToggle.checked = false
+            }
         }
     }
 
@@ -97,10 +145,14 @@ class TextEditor {
     }
 
     getLastEdited (files) {
-        return files.reduce((lastEdited, file) => {
-            if (file.time > lastEdited.time) return file
-            return lastEdited
-        })
+        if (files.length) {
+            return files.reduce((lastEdited, file) => {
+                if (file.time > lastEdited.time) return file
+                return lastEdited
+            })
+        }
+
+        return null
     }
 
     showLastEdited (files) {
@@ -123,10 +175,10 @@ class TextEditor {
             return f
         })
 
-        return this.db.setItem('files', files)
-            .then(files => this.updateSaveTime(files))
-            .then(files => this.listFiles(files))
-            .catch(this.handleError)
+        const savedFiles = this.db.setItem('files', files)
+                                .then(files => this.updateSaveTime(files))
+        const deletedFiles = this.db.setItem('deletedFiles', this.deletedFiles)
+        return Promise.all([savedFiles, deletedFiles]).catch(this.handleError)
     }
 
     updateSaveTime (files) {
@@ -149,7 +201,9 @@ class TextEditor {
     }
 
     selectFile (event) {
-        if (event.target.tagName === 'LI') {
+        const hasDeleteButton = event.target.lastChild.classList && event.target.lastChild.classList.contains('delete')
+        if (event.target.tagName === 'LI' && hasDeleteButton) {
+            // Only allow regular files to be edited - avoid any deleted.
             this.openFile = this.files.find(f => f.id === event.target.dataset.id)
             this.showFile(this.openFile)
             this.toggleMenu()
@@ -161,7 +215,8 @@ class TextEditor {
         // before the current open one has been saved.
         // IDEA: Maybe solve this with a timeout? Or just make better use of the promises?
         this.files.push(this.createFile())
-        this.showLastEdited(this.files)
+        this.openFile = this.getLastEdited(this.files)
+        this.showFile(this.openFile)
         this.listFiles(this.files)
         this.saveAllFiles()
 
@@ -173,9 +228,26 @@ class TextEditor {
     }
 
     toggleMenu () {
+        if (this.menuContainer.classList.contains('hidden')) {
+            // Refresh file list when menu is shown.
+            this.listFiles(this.files)
+
+            if (this.deletedFiles.length) {
+                this.showDeletedFilesToggle.parentElement.classList.remove('hidden')
+            }
+        }
+
         this.contentWrapper.classList.toggle('no-scroll')
         this.menuContainer.classList.toggle('hidden')
         this.menuContainer.scrollTop = 0
+    }
+
+    toggleFileListType (showDeleted) {
+        if (showDeleted && this.deletedFiles.length) {
+            this.listFiles(this.deletedFiles, true)
+        } else {
+            this.listFiles(this.files)
+        }
     }
 
     bindUI () {
@@ -210,6 +282,8 @@ class TextEditor {
                 this.addNewFile()
             }
         })
+
+        this.showDeletedFilesToggle.addEventListener('change', event => this.toggleFileListType(event.target.checked))
 
         // Select the whole filename for quick editing.
         this.fileName.addEventListener('focus', e => e.target.select())
