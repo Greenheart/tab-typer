@@ -6,6 +6,7 @@ class TextEditor {
         this.newFileButton = document.querySelector('#new')
         this.menuToggle = document.querySelector('#menu-toggle')
         this.menuContainer = document.querySelector('.menu-background')
+        this.fileName = document.querySelector('#file-name')
         this.fileMessage = document.querySelector('#file-message')
         this.bindUI()
 
@@ -77,6 +78,7 @@ class TextEditor {
 
     showFile (file) {
         if (file) {
+            this.fileName.value = file.name
             this.editor.value = file.content
             this.lastSave.innerText = this.getSaveTimeString(file.lastSave)
         }
@@ -98,6 +100,7 @@ class TextEditor {
         const date = new Date()
         const files = this.files.map(f => {
             if (f === this.openFile) {
+                f.name = this.fileName.value || 'Untitled'
                 f.content = this.editor.value,
                 f.lastSave = date.toLocaleTimeString(),
                 f.time = date.getTime()
@@ -107,11 +110,13 @@ class TextEditor {
 
         this.db.setItem('files', files)
             .then(files => this.updateSaveTime(files))
+            .then(files => this.listFiles(files))
             .catch(this.handleError)
     }
 
     updateSaveTime (files) {
         this.lastSave.innerText = this.getSaveTimeString(this.openFile.lastSave)
+        return files
     }
 
     getSaveTimeString (time) {
@@ -183,6 +188,10 @@ class TextEditor {
                 this.addNewFile()
             }
         })
+
+        // Select the whole filename for quick editing.
+        this.fileName.addEventListener('focus', e => e.target.select())
+        this.fileName.addEventListener('input', Helpers.debounce(() => this.saveAllFiles(), 1000))
 
         window.addEventListener('keydown', event => {
             if (event.key === 'Escape') {
