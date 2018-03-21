@@ -8,6 +8,7 @@ class TextEditor {
         this.menuContainer = document.querySelector('.menu-background')
         this.fileName = document.querySelector('#file-name')
         this.fileMessage = document.querySelector('#file-message')
+        this.contentWrapper = document.querySelector('.content-wrapper')
         this.bindUI()
 
         this.files = []
@@ -149,7 +150,7 @@ class TextEditor {
     }
 
     toggleMenu () {
-        document.body.classList.toggle('no-scroll')
+        this.contentWrapper.classList.toggle('no-scroll')
         this.menuContainer.classList.toggle('hidden')
         this.menuContainer.scrollTop = 0
     }

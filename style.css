@@ -165,10 +165,13 @@ h1 {
     display: none;
 }
 
-.spacer {
-    height: calc(var(--header-offset) * 4);
-    background: transparent;
-    width: 100%;
+.content-wrapper {
+    position: absolute;
+    overflow-y: scroll;
+    top: var(--header-height);
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 
 main {
@@ -179,7 +182,7 @@ main {
     flex: 1 1 auto;
     flex-direction: column;
     min-height: 1000px;
-    margin: 0 auto 100px;
+    margin: var(--header-offset) auto 100px;
 }
 
 /*

@@ -23,14 +23,15 @@
                 <ul id="file-list"></ul>
             </section>
         </div>
-        <div class="spacer"></div>
-        <main class="paper">
-            <input id="file-name" type="text" value="" placeholder="Enter filename" required>
-            <span id="last-save" class="unselectable"></span>
-            <textarea id="editor"></textarea>
-            <script src="https://cdn.jsdelivr.net/npm/localforage@1.6.0/dist/localforage.min.js"></script>
-            <script src="text-editor.js"></script>
-            <script src="main.js"></script>
-        </main>
+        <div class="content-wrapper no-scroll">
+            <main class="paper">
+                <input id="file-name" type="text" value="" placeholder="Enter filename" required>
+                <span id="last-save" class="unselectable"></span>
+                <textarea id="editor"></textarea>
+                <script src="https://cdn.jsdelivr.net/npm/localforage@1.6.0/dist/localforage.min.js"></script>
+                <script src="text-editor.js"></script>
+                <script src="main.js"></script>
+            </main>
+        </div>
     </body>
 </html>
