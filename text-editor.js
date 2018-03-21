@@ -47,14 +47,8 @@ class TextEditor {
 
                 return this.files
             })
-            .then(files => {
-                this.listFiles(files)
-                return files
-            })
-            .then(files => {
-                this.showLastEdited(files)
-                return files
-            })
+            .then(files => this.listFiles(files))
+            .then(files => this.showLastEdited(files))
             .catch(this.handleError)
     }
 
@@ -73,8 +67,25 @@ class TextEditor {
 
     listFiles (files) {
         const message = files.length ? 'Select a file to open it.' : `Looks like you have no files yet. <a href="javascript:;">Create one</a>.`
-        this.fileList.innerHTML = files.map(f => `<li class="btn" data-id="${f.id}">${f.name}</li>`).join('')
+        this.fileList.innerHTML = files.map(f => `<li class="btn" data-id="${f.id}">${f.name} <button class="btn unselectable" title="Delete">X</button></li>`).join('')
         this.fileMessage.innerHTML = message
+        for (const b of this.fileList.querySelectorAll('button')) {
+            b.addEventListener('click', event => this.deleteFile(event))
+        }
+
+        return files
+    }
+
+    deleteFile (event) {
+        // TODO: Check if user really want to delete the file
+        // http://alistapart.com/article/neveruseawarning
+        if (confirm('Are you sure you want to delete this file?')) {
+            const id = event.target.parentElement.dataset.id
+            this.files = this.files.filter(f => f.id !== id)
+            this.openFile = this.getLastEdited(this.files)
+            this.showLastEdited(this.files)
+            this.saveAllFiles()
+        }
     }
 
     showFile (file) {
@@ -85,13 +96,16 @@ class TextEditor {
         }
     }
 
+    getLastEdited (files) {
+        return files.reduce((lastEdited, file) => {
+            if (file.time > lastEdited.time) return file
+            return lastEdited
+        })
+    }
+
     showLastEdited (files) {
         if (files) {
-            const lastEdited = files.reduce((lastEdited, file) => {
-                if (file.time > lastEdited.time) return file
-                return lastEdited
-            })
-
+            const lastEdited = this.getLastEdited(files)
             this.showFile(lastEdited)
             this.openFile = lastEdited
         }
@@ -145,6 +159,7 @@ class TextEditor {
     addNewFile () {
         // NOTE: There may be some data loss here if the user creates a new file,
         // before the current open one has been saved.
+        // IDEA: Maybe solve this with a timeout? Or just make better use of the promises?
         this.files.push(this.createFile())
         this.showLastEdited(this.files)
         this.listFiles(this.files)
