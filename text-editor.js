@@ -134,6 +134,14 @@ class TextEditor {
         this.editor.style.height = this.editor.scrollHeight + 2 + 'px'
     }
 
+    selectFile (event) {
+        if (event.target.tagName === 'LI') {
+            this.openFile = this.files.find(f => f.id === event.target.dataset.id)
+            this.showFile(this.openFile)
+            this.toggleMenu()
+        }
+    }
+
     addNewFile () {
         // NOTE: There may be some data loss here if the user creates a new file,
         // before the current open one has been saved.
@@ -175,13 +183,7 @@ class TextEditor {
 
         this.newFileButton.addEventListener('click', () => this.addNewFile())
 
-        this.fileList.addEventListener('click', event => {
-            if (event.target.tagName === 'LI') {
-                this.openFile = this.files.find(f => f.id === event.target.dataset.id)
-                this.showFile(this.openFile)
-                this.toggleMenu()
-            }
-        })
+        this.fileList.addEventListener('click', event => this.selectFile(event))
 
         this.menuToggle.addEventListener('click', event => this.toggleMenu())
         this.fileMessage.addEventListener('click', event => {
