@@ -163,13 +163,16 @@ h1 {
 
 #file-list li button {
     display: none;
-    border-radius: 50%;
     height: 40px;
-    width: 40px;
     padding: 0;
     text-transform: uppercase;
     font-size: 22px;
     outline: 0;
+}
+
+#file-list li button.delete {
+    border-radius: 50%;
+    width: 40px;
 }
 
 #last-save {
@@ -183,6 +186,60 @@ h1 {
 #last-save:empty,
 #file-list:empty {
     display: none;
+}
+
+.file-list-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 10px auto 20px;
+    width: 200px;
+    padding: 5px;
+}
+
+.file-list-toggle:hover {
+    background: #f0f3f5;
+}
+
+.file-list-toggle label {
+    flex: 1;
+    font-size: 16px;
+    align-self: center;
+}
+
+.file-list-toggle label,
+.file-list-toggle input {
+    cursor: pointer;
+}
+
+input[type="checkbox"] {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: white;
+    border: 2px solid var(--light-gray);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 2px;
+    outline: 0;
+}
+input[type="checkbox"]::after {
+    font-weight: 400;
+    font-size: 22px;
+    margin-bottom: 1px;
+}
+
+input[type="checkbox"]:checked::after {
+    content: '✓';
+    color: black;
+}
+
+input[type="checkbox"]:not(:checked):hover::after {
+    content: '✓';
+    color: var(--light-gray);
 }
 
 .content-wrapper {
