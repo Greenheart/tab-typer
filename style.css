@@ -62,6 +62,7 @@ header button:last-child {
     font-family: Consolas, monospace;
     transition: all 0.1s ease-out;
     border-radius: 1px;
+    outline: 0;
 }
 
 .btn:hover {
@@ -69,6 +70,10 @@ header button:last-child {
     box-shadow: 1px 1px 2px 2px rgba(0, 0, 0, .12);
     transition: all 0.05s ease-in;
     transform: scale(1.02);
+}
+
+button::-moz-focus-inner {
+  border: 0;
 }
 
 h1 {
