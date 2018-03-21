@@ -109,7 +109,7 @@ class TextEditor {
             return f
         })
 
-        this.db.setItem('files', files)
+        return this.db.setItem('files', files)
             .then(files => this.updateSaveTime(files))
             .then(files => this.listFiles(files))
             .catch(this.handleError)
@@ -176,10 +176,14 @@ class TextEditor {
         this.editor.placeholder = `Hey there!\n\nThis is a simple, offline-first text editor for your browser. Files are saved automatically as you type, and stored locally on your device.\n\nPress ESC to quickly toggle the menu, where you can manage all your files.\n\n\nEnjoy!\n// Samuel`
         this.editor.focus()
 
-        if (window.DEBUG !== true) {
-            // Save before tab is closed.
-            window.addEventListener('beforeunload', () => this.saveAllFiles())
-        }
+        // if (window.DEBUG === true) {
+        //     // Save before tab is closed.
+        //     window.addEventListener('beforeunload', async () => {
+        //         // This might work, in order to force the browser to wait for a completed save.
+        //         const res = await this.saveAllFiles()
+        //         return
+        //     })
+        // }
 
         this.newFileButton.addEventListener('click', () => this.addNewFile())
 
