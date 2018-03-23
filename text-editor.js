@@ -216,9 +216,7 @@ class TextEditor {
     }
 
     selectFile (event) {
-        // TODO: fix this method: Refactor to take new download button into account.
-        const hasDeleteButton = event.target.lastChild.classList && event.target.lastChild.classList.contains('delete')
-        if (event.target.tagName === 'LI' && hasDeleteButton) {
+        if (event.target.tagName === 'LI' && !event.target.classList.contains('deleted-file')) {
             // Only allow regular files to be edited - avoid any deleted.
             this.openFile = this.files.find(f => f.id === event.target.dataset.id)
             this.showFile(this.openFile)
