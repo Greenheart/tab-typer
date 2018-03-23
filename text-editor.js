@@ -20,10 +20,13 @@ class TextEditor {
 
         if (window.DEBUG) {
             window.c = () => {
+                // Do a complete reset of app state (both active and persisted).
                 localforage.clear()
                 this.files = []
+                this.deletedFiles = []
                 this.fileList.innerHTML = ''
                 editor.value = ''
+                editor.title = ''
 
                 this.showDeletedFilesToggle.checked = false
                 this.showDeletedFilesToggle.parentElement.classList.add('hidden')
@@ -31,6 +34,7 @@ class TextEditor {
             }
 
             window.a = () => {
+                // Show all locally stored data.
                 localforage.iterate((v, k) => console.info(v.length, k, v))
             }
         }
