@@ -302,7 +302,7 @@ class TextEditor {
         this.fileName.addEventListener('input', Helpers.debounce(() => this.saveAllFiles(), 1000))
 
         window.addEventListener('keydown', event => {
-            if (event.key === 'Escape') {
+            if (event.key === 'Escape' && this.files.length) {
                 this.toggleMenu()
             }
         })
