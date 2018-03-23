@@ -74,20 +74,18 @@ class TextEditor {
     }
 
     createFile (name = 'Untitled') {
-        const date = new Date()
         return {
             name,
             content: '',
             // TODO: Save files with only the unix timestamp, the string can be retrieved when needed.
             // store in `lastSave` to clarify meaning of the timestamp.
-            lastSave: date.toLocaleTimeString(),
-            time: date.getTime(),
+            lastSave: Date.now(),
             id: Helpers.uuidv4()
         }
     }
 
     listFiles (files, showDeleted = false) {
-        const lastEditedFirst = (a, b) => b.time - a.time
+        const lastEditedFirst = (a, b) => b.lastSave - a.lastSave
         let render
         let message
 
@@ -151,14 +149,14 @@ class TextEditor {
         if (file) {
             this.fileName.value = file.name
             this.editor.value = file.content
-            this.lastSave.innerText = this.getSaveTimeString(file.lastSave)
+            this.lastSave.innerText = this.getSaveTimeString(file)
         }
     }
 
     getLastEdited (files) {
         if (files.length) {
             return files.reduce((lastEdited, file) => {
-                if (file.time > lastEdited.time) return file
+                if (file.lastSave > lastEdited.lastSave) return file
                 return lastEdited
             })
         }
@@ -175,14 +173,12 @@ class TextEditor {
     }
 
     saveAllFiles () {
-        const date = new Date()
         const files = this.files.map(f => {
             const hasChanged = (f.content !== this.editor.value || f.name !== this.fileName.value)
             if (f === this.openFile && hasChanged) {
                 f.name = this.fileName.value || 'Untitled'
                 f.content = this.editor.value,
-                f.lastSave = date.toLocaleTimeString(),
-                f.time = date.getTime()
+                f.lastSave = Date.now()
             }
             return f
         })
@@ -194,12 +190,12 @@ class TextEditor {
     }
 
     updateSaveTime (files) {
-        this.lastSave.innerText = this.getSaveTimeString(this.openFile.lastSave)
+        this.lastSave.innerText = this.getSaveTimeString(this.openFile)
         return files
     }
 
-    getSaveTimeString (time) {
-        return 'Saved ' + time
+    getSaveTimeString (file) {
+        return 'Saved ' + new Date(file.lastSave).toLocaleTimeString()
     }
 
     handleError (error) {
