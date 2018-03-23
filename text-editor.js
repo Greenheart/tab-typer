@@ -90,7 +90,7 @@ class TextEditor {
         let message
 
         if (showDeleted && files.length) {
-            render = f => `<li class="btn deleted-file" data-id="${f.id}">${f.name} <button class="btn">Restore</button></li>`
+            render = f => `<li class="btn deleted-file" data-id="${f.id}">${f.name} <button class="btn restore">Restore</button></li>`
             message = 'These are your deleted files. Use the button on each file to restore it.'
         } else {
             render = f => `<li class="btn" data-id="${f.id}">${f.name} <div><button class="btn download" title="Download"><i class="material-icons">file_download</i></button> <button class="btn delete" title="Delete"><i class="material-icons">delete</i></button></div></li>`
@@ -100,17 +100,10 @@ class TextEditor {
         this.fileList.innerHTML = files.slice().sort(lastEditedFirst).map(render).join('')
         this.fileMessage.innerHTML = message
 
-        // TODO: Refactor this to simplify: Select the action callback
-        // => dynamically depending on the class ('restore', 'delete', 'download')
-        // Add 'restore' class to the restore button.
-        // Also make sure all event listeners related to these buttons make use of the classes.
         for (const b of this.fileList.querySelectorAll('button')) {
-            if (showDeleted) {
-                b.addEventListener('click', event => this.restoreFile(event))
-            } else if (b.classList.contains('delete')) {
-                b.addEventListener('click', event => this.deleteFile(event))
-            } else if (b.classList.contains('download')) {
-                b.addEventListener('click', event => this.downloadFile(event))
+            const action = ['restore', 'delete', 'download'].find(action => b.classList.contains(action))
+            if (action) {
+                b.addEventListener('click', event => this[action + 'File'](event))
             }
         }
 
