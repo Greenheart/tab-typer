@@ -173,7 +173,8 @@ class TextEditor {
     saveAllFiles () {
         const date = new Date()
         const files = this.files.map(f => {
-            if (f === this.openFile) {
+            const hasChanged = (f.content !== this.editor.value || f.name !== this.fileName.value)
+            if (f === this.openFile && hasChanged) {
                 f.name = this.fileName.value || 'Untitled'
                 f.content = this.editor.value,
                 f.lastSave = date.toLocaleTimeString(),
