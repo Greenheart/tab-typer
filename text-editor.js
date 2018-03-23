@@ -228,6 +228,10 @@ class TextEditor {
         // NOTE: There may be some data loss here if the user creates a new file,
         // before the current open one has been saved.
         // IDEA: Maybe solve this with a timeout? Or just make better use of the promises?
+        // The timeout approach would mean that action callbacks can keep running at a
+        // interval until actions that need to execute before them are done.
+        // This can't be solved with promises specifically, because we don't need what actions
+        // a user may take while the state is being saved.
         this.files.push(this.createFile())
         this.openFile = this.getLastEdited(this.files)
         this.showFile(this.openFile)
@@ -265,7 +269,7 @@ class TextEditor {
     }
 
     bindUI () {
-        // Save 2 seconds after the user stops typing.
+        // Save 1 second after the user stops typing.
         this.editor.addEventListener('input', Helpers.debounce(() => this.saveAllFiles(), 1000))
 
         this.editor.addEventListener('input', Helpers.preventScroll(this.editor, this.updateEditorHeight.bind(this)))
@@ -274,7 +278,7 @@ class TextEditor {
         Helpers.throttle('resize', 'optimizedResize')
         window.addEventListener('optimizedResize', event => this.updateEditorHeight())
 
-        this.editor.placeholder = `Hey there!\n\nThis is a simple, offline-first text editor for your browser. Files are saved automatically as you type, and stored locally on your device.\n\nPress ESC to quickly toggle the menu, where you can manage all your files.\n\n\nEnjoy!\n// Samuel`
+        this.editor.placeholder = `Hey there!\n\nThis is a simple, offline-first text editor for your browser. Files are saved automatically as you type, and stored locally on your device - as long as you don't clear browser data for this app. Remember to download any files you want to keep for a longer time.\n\nPress ESC to quickly toggle the menu, where you can manage all your files.\n\n\nEnjoy!\n// Samuel`
         this.editor.focus()
 
         // if (window.DEBUG === true) {
