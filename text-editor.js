@@ -77,8 +77,6 @@ class TextEditor {
         return {
             name,
             content: '',
-            // TODO: Save files with only the unix timestamp, the string can be retrieved when needed.
-            // store in `lastSave` to clarify meaning of the timestamp.
             lastSave: Date.now(),
             id: Helpers.uuidv4()
         }
