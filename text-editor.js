@@ -93,27 +93,42 @@ class TextEditor {
             render = f => `<li class="btn deleted-file" data-id="${f.id}">${f.name} <button class="btn">Restore</button></li>`
             message = 'These are your deleted files. Use the button on each file to restore it.'
         } else {
-            render = f => `<li class="btn" data-id="${f.id}">${f.name} <button class="btn delete" title="Delete">X</button></li>`
+            render = f => `<li class="btn" data-id="${f.id}">${f.name} <div><button class="btn download" title="Download"><i class="material-icons">file_download</i></button> <button class="btn delete" title="Delete"><i class="material-icons">delete</i></button></div></li>`
             message = files.length ? 'Select a file to open it. Or <a href="javascript:;">create a new one</a>.' : `Looks like you have no files yet. <a href="javascript:;">Create one</a>.`
         }
 
         this.fileList.innerHTML = files.slice().sort(lastEditedFirst).map(render).join('')
         this.fileMessage.innerHTML = message
 
+        // TODO: Refactor this to simplify: Select the action callback
+        // => dynamically depending on the class ('restore', 'delete', 'download')
+        // Add 'restore' class to the restore button.
+        // Also make sure all event listeners related to these buttons make use of the classes.
         for (const b of this.fileList.querySelectorAll('button')) {
             if (showDeleted) {
                 b.addEventListener('click', event => this.restoreFile(event))
-            } else {
+            } else if (b.classList.contains('delete')) {
                 b.addEventListener('click', event => this.deleteFile(event))
+            } else if (b.classList.contains('download')) {
+                b.addEventListener('click', event => this.downloadFile(event))
             }
         }
 
         return files
     }
 
+    downloadFile (event) {
+        const id = event.target.parentElement.parentElement.dataset.id
+        const file = this.files.find(f => f.id === id)
+        if (file) {
+            const blob = new Blob([file.content], { type: 'text/plain' })
+            window.saveAs(blob, file.name + '.txt')
+        }
+    }
+
     deleteFile (event) {
         // http://alistapart.com/article/neveruseawarning
-        const id = event.target.parentElement.dataset.id
+        const id = event.target.parentElement.parentElement.dataset.id
         const file = this.files.find(f => f.id === id)
         if (file) {
             this.files = this.files.filter(f => f.id !== id)
@@ -210,6 +225,7 @@ class TextEditor {
     }
 
     selectFile (event) {
+        // TODO: fix this method: Refactor to take new download button into account.
         const hasDeleteButton = event.target.lastChild.classList && event.target.lastChild.classList.contains('delete')
         if (event.target.tagName === 'LI' && hasDeleteButton) {
             // Only allow regular files to be edited - avoid any deleted.

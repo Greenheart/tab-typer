@@ -160,25 +160,30 @@ h1 {
     align-items: center;
 }
 
-#file-list li:hover > button {
-    display: inline-block;
+#file-list li:hover button {
+    display: inline-flex;
+    justify-content: center;
+    visibility: visible;
+    transition-property: visibility;
+    transition-delay: 0.13s;
 }
 
 #file-list li:first-child {
     margin-top: 0;
 }
 
-#file-list li button {
-    display: none;
+#file-list button {
+    visibility: hidden;
     height: 40px;
     text-transform: uppercase;
+    color: #222;
     font-size: 20px;
     outline: 0;
     padding: 0 10px;
 }
 
-#file-list li button.delete {
-    font-size: 22px;
+#file-list button.delete,
+#file-list button.download {
     border-radius: 50%;
     width: 40px;
     padding: 0;
