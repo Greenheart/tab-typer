@@ -121,6 +121,7 @@ class TextEditor {
             this.listFiles(this.files)
             this.showDeletedFilesToggle.parentElement.classList.remove('hidden')
             this.saveAllFiles()
+            this.showLastEdited(this.files)
         }
     }
 
@@ -195,7 +196,7 @@ class TextEditor {
     }
 
     getSaveTimeString (file) {
-        return 'Saved ' + new Date(file.lastSave).toLocaleTimeString()
+        return file ? 'Saved ' + new Date(file.lastSave).toLocaleTimeString() : ''
     }
 
     handleError (error) {
