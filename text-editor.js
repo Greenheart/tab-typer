@@ -83,14 +83,21 @@ class TextEditor {
     }
 
     listFiles (files, showDeleted = false) {
+        const lastEditedFirst = (a, b) => b.time - a.time
+        let render
+        let message
+
         if (showDeleted && files.length) {
-            this.fileMessage.innerHTML = 'These are your deleted files. Use the button on each file to restore it.'
-            this.fileList.innerHTML = files.map(f => `<li class="btn deleted-file" data-id="${f.id}">${f.name} <button class="btn">Restore</button></li>`).join('')
+            render = f => `<li class="btn deleted-file" data-id="${f.id}">${f.name} <button class="btn">Restore</button></li>`
+            message = 'These are your deleted files. Use the button on each file to restore it.'
         } else {
-            const message = files.length ? 'Select a file to open it. Or <a href="javascript:;">create a new one</a>.' : `Looks like you have no files yet. <a href="javascript:;">Create one</a>.`
-            this.fileList.innerHTML = files.map(f => `<li class="btn" data-id="${f.id}">${f.name} <button class="btn delete" title="Delete">X</button></li>`).join('')
-            this.fileMessage.innerHTML = message
+            render = f => `<li class="btn" data-id="${f.id}">${f.name} <button class="btn delete" title="Delete">X</button></li>`
+            message = files.length ? 'Select a file to open it. Or <a href="javascript:;">create a new one</a>.' : `Looks like you have no files yet. <a href="javascript:;">Create one</a>.`
         }
+
+        this.fileList.innerHTML = files.slice().sort(lastEditedFirst).map(render).join('')
+        this.fileMessage.innerHTML = message
+
         for (const b of this.fileList.querySelectorAll('button')) {
             if (showDeleted) {
                 b.addEventListener('click', event => this.restoreFile(event))
