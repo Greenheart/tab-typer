@@ -165,7 +165,6 @@ class TextEditor {
         const name = file.name
         const content = event.target.result
         this.addNewFile({ name, content })
-        event.target.value = ''
     }
 
     getLastEdited (files) {

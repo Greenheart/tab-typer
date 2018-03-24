@@ -49,6 +49,7 @@ const Helpers = {
             const reader = new FileReader()
             reader.onload = e => callback(file, e)
             reader.readAsText(file)
+            event.target.value = ''
         }
     }
 }
