@@ -114,7 +114,7 @@ class TextEditor {
         const file = this.files.find(f => f.id === id)
         if (file) {
             const blob = new Blob([file.content], { type: 'text/plain' })
-            window.saveAs(blob, file.name + '.txt')
+            window.saveAs(blob, file.name.endsWith('.txt') ? file.name : file.name + '.txt')
         }
     }
 
