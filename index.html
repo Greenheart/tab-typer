@@ -25,6 +25,11 @@
                     <input id="show-deleted" name="show-deleted" type="checkbox">
                 </span>
                 <p id="file-message"></p>
+                <!-- TODO: Instead of dynamically populating #file-message, store information here in HTML.
+                            Then just toggle which message sohuld be visible with JS.
+                -->
+                <!-- TODO: Only allow text files to be uploaded. -->
+                <p>You can also upload a local file to edit: <input type="file" id="file-upload"></p>
                 <ul id="file-list" class="unselectable"></ul>
             </section>
         </div>

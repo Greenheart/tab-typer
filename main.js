@@ -41,5 +41,14 @@ const Helpers = {
             callback()
             textarea.scrollTop = top
         }
+    },
+    loadFile (event, callback) {
+        // Used for file uploads.
+        const file = event.target.files[0]
+        if (file) {
+            const reader = new FileReader()
+            reader.onload = e => callback(file, e)
+            reader.readAsText(file)
+        }
     }
 }

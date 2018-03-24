@@ -10,6 +10,7 @@ class TextEditor {
         this.fileMessage = document.querySelector('#file-message')
         this.contentWrapper = document.querySelector('.content-wrapper')
         this.showDeletedFilesToggle = document.querySelector('#show-deleted')
+        this.fileUpload = document.querySelector('#file-upload')
         this.bindUI()
 
         this.files = []
@@ -73,10 +74,10 @@ class TextEditor {
             .catch(this.handleError)
     }
 
-    createFile (name = 'Untitled') {
+    createFile (fileData = {}) {
         return {
-            name,
-            content: '',
+            name: fileData.name || 'Untitled',
+            content: fileData.content || '',
             lastSave: Date.now(),
             id: Helpers.uuidv4()
         }
@@ -160,6 +161,13 @@ class TextEditor {
         }
     }
 
+    addLocalFile (file, event) {
+        const name = file.name
+        const content = event.target.result
+        this.addNewFile({ name, content })
+        event.target.value = ''
+    }
+
     getLastEdited (files) {
         if (files.length) {
             return files.reduce((lastEdited, file) => {
@@ -224,7 +232,7 @@ class TextEditor {
         }
     }
 
-    addNewFile () {
+    addNewFile (fileData = {}) {
         // NOTE: There may be some data loss here if the user creates a new file,
         // before the current open one has been saved.
         // IDEA: Maybe solve this with a timeout? Or just make better use of the promises?
@@ -232,7 +240,7 @@ class TextEditor {
         // interval until actions that need to execute before them are done.
         // This can't be solved with promises specifically, because we don't need what actions
         // a user may take while the state is being saved.
-        this.files.push(this.createFile())
+        this.files.push(this.createFile(fileData))
         this.openFile = this.getLastEdited(this.files)
         this.showFile(this.openFile)
         this.listFiles(this.files)
@@ -306,6 +314,8 @@ class TextEditor {
         // Select the whole filename for quick editing.
         this.fileName.addEventListener('focus', e => e.target.select())
         this.fileName.addEventListener('input', Helpers.debounce(() => this.saveAllFiles(), 1000))
+
+        this.fileUpload.addEventListener('change', event => Helpers.loadFile(event, this.addLocalFile.bind(this)))
 
         window.addEventListener('keydown', event => {
             if (event.key === 'Escape' && this.files.length) {
