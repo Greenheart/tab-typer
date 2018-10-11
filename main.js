@@ -51,5 +51,8 @@ const Helpers = {
             reader.readAsText(file)
             event.target.value = ''
         }
+    },
+    formatDate (unixTime) {
+        return new Date(unixTime).toLocaleString('sv-SE').replace(/:\d+$/, '');
     }
 }

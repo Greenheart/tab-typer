@@ -89,10 +89,22 @@ class TextEditor {
         let message
 
         if (showDeleted && files.length) {
-            render = f => `<li class="btn deleted-file" data-id="${f.id}">${f.name} <button class="btn restore">Restore</button></li>`
+            render = f => `<li class="btn deleted-file" data-id="${f.id}">${f.name}
+                <div>
+                    <button class="btn last-save" title="Last save: ${Helpers.formatDate(f.lastSave)}"><i class="material-icons">access_time</i></button>
+                    <button class="btn restore">Restore</button>
+                </div>
+            </li>`
             message = 'These are your deleted files. Use the button on each file to restore it.'
         } else {
-            render = f => `<li class="btn" data-id="${f.id}">${f.name} <div><button class="btn download" title="Download"><i class="material-icons">file_download</i></button> <button class="btn delete" title="Delete"><i class="material-icons">delete</i></button></div></li>`
+            render = f => `
+            <li class="btn" data-id="${f.id}">${f.name}
+                <div>
+                    <button class="btn last-save" title="Last save: ${Helpers.formatDate(f.lastSave)}"><i class="material-icons">access_time</i></button>
+                    <button class="btn download" title="Download"><i class="material-icons">file_download</i></button>
+                    <button class="btn delete" title="Delete"><i class="material-icons">delete</i></button>
+                </div>
+            </li>`
             message = files.length ? 'Select a file to open it. Or <a href="javascript:;">create a new one</a>.' : `Looks like you have no files yet. <a href="javascript:;">Create one</a>.`
         }
 
