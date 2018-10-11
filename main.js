@@ -48,8 +48,17 @@ const Helpers = {
         if (file) {
             const reader = new FileReader()
             reader.onload = e => callback(file, e)
-            reader.readAsText(file)
+            reader.readAsText(file, 'ISO-8859-1')
+            // https://stackoverflow.com/questions/30443080/javascript-filereader-readastext-function-not-understaning-utf-8-encoding-charac
+            // TODO: read with correct encoding.
+            // This will correctly read windows files (but maybe nothing else): reader.readAsText(file, 'ISO-8859-1')
             event.target.value = ''
         }
+    },
+    // Credit: https://stackoverflow.com/a/29739478
+    escapeStringAsUnicode (str) {
+        return str.split('')
+                .map(s => '\\u'+('0000' + s.charCodeAt(0).toString(16)).slice(-4))
+                .join('')
     }
 }

@@ -119,7 +119,7 @@ class TextEditor {
     }
 
     deleteFile (event) {
-        // http://alistapart.com/article/neveruseawarning
+        // UX tip: http://alistapart.com/article/neveruseawarning
         const id = event.target.parentElement.parentElement.dataset.id
         const file = this.files.find(f => f.id === id)
         if (file) {
@@ -163,6 +163,13 @@ class TextEditor {
 
     addLocalFile (file, event) {
         const name = file.name
+        // const content = window.decodeURIComponent(
+        //     JSON.parse('"' + Helpers.escapeStringAsUnicode(event.target.result) + '"')
+        // )
+
+        // TODO: see if jschardet can be of any help when detecting the correct file encoding.
+        // const result = jschardet.detect(event.target.result)
+
         const content = event.target.result
         this.addNewFile({ name, content })
     }
