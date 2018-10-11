@@ -317,7 +317,7 @@ class TextEditor {
         this.fileUpload.addEventListener('change', event => Helpers.loadFile(event, this.addLocalFile.bind(this)))
 
         window.addEventListener('keydown', event => {
-            if (event.key === 'Escape' && this.files.length) {
+            if (event.key === 'Escape' && this.files.length && !event.repeat) {
                 this.toggleMenu()
             }
         })
