@@ -89,18 +89,19 @@ class TextEditor {
         let message
 
         if (showDeleted && files.length) {
-            render = f => `<li class="btn deleted-file" data-id="${f.id}">${f.name}
-                <div>
-                    <button class="btn last-save" title="Last save: ${Helpers.formatDate(f.lastSave)}"><i class="material-icons">access_time</i></button>
-                    <button class="btn restore">Restore</button>
+            render = f => `
+            <li class="btn deleted-file" data-id="${f.id}">${f.name}
+                <div class="file-actions">
+                    <span class="last-save" title="Saved ${Helpers.formatDate(f.lastSave)}"><i class="material-icons">access_time</i></span>
+                    <button class="btn restore" title="Restore"><i class="material-icons">restore_from_trash</i></button>
                 </div>
             </li>`
             message = 'These are your deleted files. Use the button on each file to restore it.'
         } else {
             render = f => `
             <li class="btn" data-id="${f.id}">${f.name}
-                <div>
-                    <button class="btn last-save" title="Last save: ${Helpers.formatDate(f.lastSave)}"><i class="material-icons">access_time</i></button>
+                <div class="file-actions">
+                    <span class="last-save" title="Saved ${Helpers.formatDate(f.lastSave)}"><i class="material-icons">access_time</i></span>
                     <button class="btn download" title="Download"><i class="material-icons">file_download</i></button>
                     <button class="btn delete" title="Delete"><i class="material-icons">delete</i></button>
                 </div>

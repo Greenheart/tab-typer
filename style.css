@@ -160,19 +160,32 @@ h1 {
     align-items: center;
 }
 
-#file-list li:hover button {
-    display: inline-flex;
+#file-list .file-actions {
+    display: flex;
+    align-items: center;
+}
+
+#file-list li:hover button,
+#file-list li:hover span {
+    /* display: inline-flex; */
     justify-content: center;
     visibility: visible;
     transition-property: visibility;
     transition-delay: 0.13s;
 }
 
+#file-list li:hover span {
+    cursor: help;
+}
+
 #file-list li:first-child {
     margin-top: 0;
 }
 
-#file-list button {
+#file-list button,
+#file-list span {
+    display: flex;
+    align-items: center;
     visibility: hidden;
     height: 40px;
     text-transform: uppercase;
@@ -183,7 +196,9 @@ h1 {
 }
 
 #file-list button.delete,
-#file-list button.download {
+#file-list button.download,
+#file-list .last-save,
+#file-list button.restore {
     border-radius: 50%;
     width: 40px;
     padding: 0;
