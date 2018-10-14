@@ -92,8 +92,8 @@ class TextEditor {
             render = f => `
             <li class="btn deleted-file" data-id="${f.id}">${f.name}
                 <div class="file-actions">
-                    <span class="last-save" title="Saved ${Helpers.formatDate(f.lastSave)}"><i class="material-icons">access_time</i></span>
-                    <button class="btn restore" title="Restore"><i class="material-icons">restore_from_trash</i></button>
+                    <span class="last-save" data-tooltip="Saved ${Helpers.formatDate(f.lastSave)}"><i class="material-icons">access_time</i></span>
+                    <button class="btn restore" data-tooltip="Restore"><i class="material-icons">restore_from_trash</i></button>
                 </div>
             </li>`
             message = 'These are your deleted files. Use the button on each file to restore it.'
@@ -101,9 +101,9 @@ class TextEditor {
             render = f => `
             <li class="btn" data-id="${f.id}">${f.name}
                 <div class="file-actions">
-                    <span class="last-save" title="Saved ${Helpers.formatDate(f.lastSave)}"><i class="material-icons">access_time</i></span>
-                    <button class="btn download" title="Download"><i class="material-icons">file_download</i></button>
-                    <button class="btn delete" title="Delete"><i class="material-icons">delete</i></button>
+                    <span class="last-save" data-tooltip="Saved ${Helpers.formatDate(f.lastSave)}"><i class="material-icons">access_time</i></span>
+                    <button class="btn download" data-tooltip="Download"><i class="material-icons">file_download</i></button>
+                    <button class="btn delete" data-tooltip="Delete"><i class="material-icons">delete</i></button>
                 </div>
             </li>`
             message = files.length ? 'Select a file to open it. Or <a href="javascript:;">create a new one</a>.' : `Looks like you have no files yet. <a href="javascript:;">Create one</a>.`
