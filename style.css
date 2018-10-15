@@ -169,8 +169,6 @@ h1 {
 #file-list li:hover span {
     justify-content: center;
     visibility: visible;
-    transition-property: visibility;
-    transition-delay: 0.13s;
 }
 
 #file-list li:hover span {
