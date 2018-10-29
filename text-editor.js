@@ -38,6 +38,9 @@ class TextEditor {
                 // Show all locally stored data.
                 localforage.iterate((v, k) => console.info(v.length, k, v))
             }
+
+            // Expose the app instance.
+            window.app = this
         }
     }
 
@@ -252,8 +255,19 @@ class TextEditor {
         // interval until actions that need to execute before them are done.
         // This can't be solved with promises specifically, because we don't need what actions
         // a user may take while the state is being saved.
-        this.files.push(this.createFile(fileData))
-        this.openFile = this.getLastEdited(this.files)
+
+        if (this.fileList.children) {
+            const emptyFile = this.files.find(f => f.name === 'Untitled' && f.content === '')
+            // Only create a new file when no empty file already exists.
+            // This gives the same user experience, while reducing the number of empty files.
+            if (emptyFile) {
+                this.openFile = emptyFile
+            } else {
+                this.files.push(this.createFile(fileData))
+                this.openFile = this.getLastEdited(this.files)
+            }
+        }
+
         this.showFile(this.openFile)
         this.listFiles(this.files)
         this.saveAllFiles()
